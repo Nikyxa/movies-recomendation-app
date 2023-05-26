@@ -1,14 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 import uvicorn
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/")
-async def root():
-    return templates.TemplateResponse("index.html", {"message": "Hey, it's a service for the recommendation of movies."})
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 if __name__ == "__main__":
